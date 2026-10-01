@@ -1,4 +1,11 @@
+using System.Collections;
 using UnityEngine;
+
+public enum WeaponType
+{
+    ProjectileCannon,
+    HitscanLaser
+}
 
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
@@ -10,22 +17,54 @@ public class PlayerController : MonoBehaviour
     [Header("Movement & Boost Settings")]
     [SerializeField] private float accelerationForce = 35f;
     [SerializeField] private float maxSpeed = 15f;
-    [Tooltip("0 = Max Drift/Ice, 1 = Sharp Instant Turn Response")]
     [Range(0f, 1f)]
     [SerializeField] private float lateralDamping = 0.85f;
 
+    [Header("Weapon Setup & Switching")]
+    [SerializeField] private WeaponType currentWeapon = WeaponType.ProjectileCannon;
+    [SerializeField] private Transform firePoint;
+
+    [Header("Projectile Cannon Settings")]
+    [SerializeField] private GameObject bulletPrefab;
+    [SerializeField] private float projectileFireRate = 0.15f;
+    [SerializeField] private AudioClip cannonFireSound;
+    [SerializeField] private GameObject cannonMuzzleFlash;
+
+    [Header("Hitscan Laser Settings")]
+    [SerializeField] private LayerMask hitscanLayers;
+    [SerializeField] private float laserRange = 35f;
+    [SerializeField] private float laserFireRate = 0.1f;
+    [SerializeField] private LineRenderer laserLineRenderer;
+    [SerializeField] private float laserBeamDuration = 0.05f;
+    [SerializeField] private GameObject laserHitEffectPrefab;
+    [SerializeField] private AudioClip laserFireSound;
+
+    [Header("Audio Components")]
+    [SerializeField] private AudioSource audioSource;
+
     private Rigidbody rb;
     private Camera mainCamera;
+    private float nextFireTime = 0f;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
         mainCamera = Camera.main;
+
+        if (audioSource == null) audioSource = GetComponent<AudioSource>();
+        if (laserLineRenderer == null) laserLineRenderer = GetComponent<LineRenderer>();
+
+        if (laserLineRenderer != null)
+        {
+            laserLineRenderer.enabled = false;
+        }
     }
 
     private void Update()
     {
         HandleAiming();
+        HandleWeaponSwitching();
+        HandleFiring();
     }
 
     private void FixedUpdate()
@@ -35,12 +74,10 @@ public class PlayerController : MonoBehaviour
 
     private void HandleAiming()
     {
-        // Cast a ray from camera through mouse cursor position
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hitInfo, 200f, mousePlaneLayer))
         {
-            // Lock target Y coordinate to ship height to prevent tilting
             Vector3 targetPoint = hitInfo.point;
             targetPoint.y = transform.position.y;
 
@@ -56,24 +93,127 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBoost()
     {
-        // Right Mouse Button (Input 1) accelerates in the facing direction
         if (Input.GetMouseButton(1))
         {
-            // Apply forward force along the ship's facing direction
             rb.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
 
-            // Separate forward and sideways velocity components
             Vector3 forwardVelocity = Vector3.Project(rb.linearVelocity, transform.forward);
             Vector3 rightVelocity = Vector3.Project(rb.linearVelocity, transform.right);
 
-            // Dampen sideways velocity to tighten turning radius and reduce heavy outward drift
             rb.linearVelocity = forwardVelocity + (rightVelocity * (1f - lateralDamping));
 
-            // Clamp total speed to maxSpeed cap
             if (rb.linearVelocity.magnitude > maxSpeed)
             {
                 rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
             }
         }
+    }
+
+    private void HandleWeaponSwitching()
+    {
+        float scrollInput = Input.GetAxis("Mouse ScrollWheel");
+
+        if (scrollInput > 0f || scrollInput < 0f)
+        {
+            // Toggle between ProjectileCannon and HitscanLaser
+            if (currentWeapon == WeaponType.ProjectileCannon)
+            {
+                currentWeapon = WeaponType.HitscanLaser;
+                Debug.Log("Switched Weapon: HITSCAN LASER");
+            }
+            else
+            {
+                currentWeapon = WeaponType.ProjectileCannon;
+                Debug.Log("Switched Weapon: PROJECTILE CANNON");
+            }
+        }
+    }
+
+    private void HandleFiring()
+    {
+        if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
+        {
+            if (currentWeapon == WeaponType.ProjectileCannon)
+            {
+                nextFireTime = Time.time + projectileFireRate;
+                ShootProjectile();
+            }
+            else if (currentWeapon == WeaponType.HitscanLaser)
+            {
+                nextFireTime = Time.time + laserFireRate;
+                ShootLaser();
+            }
+        }
+    }
+
+    private void ShootProjectile()
+    {
+        if (bulletPrefab == null) return;
+
+        Vector3 spawnPos = firePoint != null ? firePoint.position : transform.position + transform.forward;
+        Quaternion spawnRot = transform.rotation;
+
+        Instantiate(bulletPrefab, spawnPos, spawnRot);
+
+        if (cannonMuzzleFlash != null)
+        {
+            GameObject flash = Instantiate(cannonMuzzleFlash, spawnPos, spawnRot);
+            Destroy(flash, 1f);
+        }
+
+        if (cannonFireSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(cannonFireSound);
+        }
+    }
+
+    private void ShootLaser()
+    {
+        Vector3 origin = firePoint != null ? firePoint.position : transform.position + transform.forward;
+        Vector3 direction = transform.forward;
+        Vector3 endPoint = origin + direction * laserRange;
+
+        // Perform Hitscan Raycast
+        if (Physics.Raycast(origin, direction, out RaycastHit hitInfo, laserRange, hitscanLayers))
+        {
+            endPoint = hitInfo.point;
+
+            // Damage/Destroy Debris on impact
+            Debris debris = hitInfo.collider.GetComponent<Debris>();
+            if (debris != null)
+            {
+                Destroy(debris.gameObject);
+            }
+
+            // Spawn laser hit spark visual effect
+            if (laserHitEffectPrefab != null)
+            {
+                GameObject hitVfx = Instantiate(laserHitEffectPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+                Destroy(hitVfx, 1f);
+            }
+        }
+
+        // Render Laser Beam Visuals
+        if (laserLineRenderer != null)
+        {
+            StartCoroutine(RenderLaserBeam(origin, endPoint));
+        }
+
+        // Play Laser Audio
+        if (laserFireSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(laserFireSound);
+        }
+    }
+
+    private IEnumerator RenderLaserBeam(Vector3 startPos, Vector3 endPos)
+    {
+        laserLineRenderer.enabled = true;
+        laserLineRenderer.SetPosition(0, startPos);
+        laserLineRenderer.SetPosition(1, endPos);
+
+        yield return new WaitForSeconds(laserBeamDuration);
+
+        laserLineRenderer.enabled = false;
     }
 }
