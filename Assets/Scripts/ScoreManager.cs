@@ -51,7 +51,7 @@ public class ScoreManager : MonoBehaviour
     {
         if (scoreText != null)
         {
-            scoreText.text = $"SCORE: {currentScore}";
+            scoreText.text = currentScore.ToString();
         }
     }
 
