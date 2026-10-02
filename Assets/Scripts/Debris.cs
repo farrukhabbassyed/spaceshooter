@@ -7,8 +7,11 @@ public class Debris : MonoBehaviour
     [SerializeField] private float tumbleTorque = 15f;
 
     [Header("Out-of-Bounds Removal")]
-    [SerializeField] private float outerRingRadius = 26f; // Must match or slightly exceed Spawner outerRadius
+    [SerializeField] private float outerRingRadius = 26f;
     [SerializeField] private float timeAllowedOutside = 2f;
+
+    [Header("VFX & Audio")]
+    [SerializeField] private GameObject explosionVfxPrefab;
 
     private Rigidbody rb;
     private Transform playerTransform;
@@ -24,7 +27,7 @@ public class Debris : MonoBehaviour
             playerTransform = playerObj.transform;
         }
 
-        // Random spin
+        // Apply random spin impulse on spawn
         Vector3 randomTorque = new Vector3(
             Random.Range(-1f, 1f),
             Random.Range(-1f, 1f),
@@ -40,12 +43,11 @@ public class Debris : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        // If debris is outside the ring radius
+        // Despawn out-of-bounds debris without awarding points
         if (distanceToPlayer > outerRingRadius)
         {
             outsideTimer += Time.deltaTime;
 
-            // Destroy if left outside the ring for 2 seconds continuous
             if (outsideTimer >= timeAllowedOutside)
             {
                 Destroy(gameObject);
@@ -53,8 +55,36 @@ public class Debris : MonoBehaviour
         }
         else
         {
-            // Reset timer if it re-enters the ring boundary
             outsideTimer = 0f;
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        // Check if hit by player projectiles or weapons
+        if (other.CompareTag("Bullet") || other.GetComponent<Bullet>() != null)
+        {
+            DestroyDebris();
+            Destroy(other.gameObject); // Destroy the hitting bullet
+        }
+    }
+
+    // Call this method whenever player attacks destroy this debris
+    public void DestroyDebris()
+    {
+        // Award score points
+        if (ScoreManager.Instance != null)
+        {
+            ScoreManager.Instance.AddDebrisScore();
+        }
+
+        // Spawn explosion VFX if assigned
+        if (explosionVfxPrefab != null)
+        {
+            GameObject explosion = Instantiate(explosionVfxPrefab, transform.position, Quaternion.identity);
+            Destroy(explosion, 1.5f);
+        }
+
+        Destroy(gameObject);
     }
 }
