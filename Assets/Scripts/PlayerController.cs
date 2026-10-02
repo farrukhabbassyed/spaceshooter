@@ -1,15 +1,15 @@
 using System.Collections;
 using UnityEngine;
 
-public enum WeaponType
-{
-    ProjectileCannon,
-    HitscanLaser
-}
-
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+    public enum WeaponType
+    {
+        StandardBullet,
+        HitscanLaser
+    }
+
     [Header("Aiming Settings")]
     [SerializeField] private LayerMask mousePlaneLayer;
     [SerializeField] private float rotationSpeed = 25f;
@@ -20,8 +20,8 @@ public class PlayerController : MonoBehaviour
     [Range(0f, 1f)]
     [SerializeField] private float lateralDamping = 0.85f;
 
-    [Header("Weapon Setup & Switching")]
-    [SerializeField] private WeaponType currentWeapon = WeaponType.ProjectileCannon;
+    [Header("Weapon Setup & Selection")]
+    public WeaponType currentWeapon = WeaponType.StandardBullet;
     [SerializeField] private Transform firePoint;
 
     [Header("Projectile Cannon Settings")]
@@ -75,12 +75,29 @@ public class PlayerController : MonoBehaviour
     private void HandleAiming()
     {
         Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+        Vector3 targetPoint = Vector3.zero;
+        bool pointFound = false;
 
-        if (Physics.Raycast(ray, out RaycastHit hitInfo, 200f, mousePlaneLayer))
+        // 1. Primary Check: Try Raycast against specified Mouse Plane LayerMask
+        if (mousePlaneLayer != 0 && Physics.Raycast(ray, out RaycastHit hitInfo, 300f, mousePlaneLayer))
         {
-            Vector3 targetPoint = hitInfo.point;
-            targetPoint.y = transform.position.y;
+            targetPoint = hitInfo.point;
+            pointFound = true;
+        }
+        else
+        {
+            // 2. Fallback Check: Mathematical plane at the player's height (always works without colliders/layers)
+            Plane playerPlane = new Plane(Vector3.up, new Vector3(0f, transform.position.y, 0f));
+            if (playerPlane.Raycast(ray, out float enter))
+            {
+                targetPoint = ray.GetPoint(enter);
+                pointFound = true;
+            }
+        }
 
+        if (pointFound)
+        {
+            targetPoint.y = transform.position.y;
             Vector3 lookDir = targetPoint - transform.position;
 
             if (lookDir.sqrMagnitude > 0.001f)
@@ -93,6 +110,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleBoost()
     {
+        // Right Mouse Button (Input 1) accelerates
         if (Input.GetMouseButton(1))
         {
             rb.AddForce(transform.forward * accelerationForce, ForceMode.Acceleration);
@@ -113,19 +131,13 @@ public class PlayerController : MonoBehaviour
     {
         float scrollInput = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scrollInput > 0f || scrollInput < 0f)
+        if (scrollInput > 0f || Input.GetKeyDown(KeyCode.Alpha1))
         {
-            // Toggle between ProjectileCannon and HitscanLaser
-            if (currentWeapon == WeaponType.ProjectileCannon)
-            {
-                currentWeapon = WeaponType.HitscanLaser;
-                Debug.Log("Switched Weapon: HITSCAN LASER");
-            }
-            else
-            {
-                currentWeapon = WeaponType.ProjectileCannon;
-                Debug.Log("Switched Weapon: PROJECTILE CANNON");
-            }
+            currentWeapon = WeaponType.StandardBullet;
+        }
+        else if (scrollInput < 0f || Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currentWeapon = WeaponType.HitscanLaser;
         }
     }
 
@@ -133,7 +145,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && Time.time >= nextFireTime)
         {
-            if (currentWeapon == WeaponType.ProjectileCannon)
+            if (currentWeapon == WeaponType.StandardBullet)
             {
                 nextFireTime = Time.time + projectileFireRate;
                 ShootProjectile();
@@ -173,19 +185,23 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = transform.forward;
         Vector3 endPoint = origin + direction * laserRange;
 
-        // Perform Hitscan Raycast
         if (Physics.Raycast(origin, direction, out RaycastHit hitInfo, laserRange, hitscanLayers))
         {
             endPoint = hitInfo.point;
 
-            // Damage/Destroy Debris on impact
+            // Check for Debris or Chaser Enemy targets
             Debris debris = hitInfo.collider.GetComponent<Debris>();
-            if (debris != null)
-            {
-                Destroy(debris.gameObject);
-            }
+            EnemyChaser enemy = hitInfo.collider.GetComponent<EnemyChaser>();
 
-            // Spawn laser hit spark visual effect
+            if (debris != null)
+{
+    debris.DestroyDebris(); // Triggers score, explosion VFX, and destroys the GameObject
+}
+else if (enemy != null)
+{
+    enemy.DestroyEnemy();   // Triggers score, explosion VFX, and destroys the GameObject
+}
+
             if (laserHitEffectPrefab != null)
             {
                 GameObject hitVfx = Instantiate(laserHitEffectPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
@@ -193,13 +209,11 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Render Laser Beam Visuals
         if (laserLineRenderer != null)
         {
             StartCoroutine(RenderLaserBeam(origin, endPoint));
         }
 
-        // Play Laser Audio
         if (laserFireSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(laserFireSound);
