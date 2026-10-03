@@ -149,9 +149,6 @@ public class GameOverManager : MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
-        #if UNITY_EDITOR
-        UnityEditor.EditorApplication.isPlaying = false;
-        #endif
+        SceneManager.LoadScene("Main Menu");
     }
 }
