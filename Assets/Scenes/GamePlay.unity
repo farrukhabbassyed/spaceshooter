@@ -136,7 +136,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7700419
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1534,8 +1534,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 149, y: -62}
-  m_SizeDelta: {x: 200, y: 100}
+  m_AnchoredPosition: {x: 161.0586, y: -62}
+  m_SizeDelta: {x: 224.1172, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &483579168
 MonoBehaviour:
@@ -1601,9 +1601,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e1b191a7858e5c541b5c38ebea88af72, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b64611f3d87f5244e93e7957abc411ec, type: 3}
   m_Type: 0
-  m_PreserveAspect: 0
+  m_PreserveAspect: 1
   m_FillCenter: 1
   m_FillMethod: 4
   m_FillAmount: 1
@@ -2456,8 +2456,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2082716221}
-  - {fileID: 1780707397}
   - {fileID: 1901277051}
+  - {fileID: 1780707397}
   m_Father: {fileID: 1228405156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -3254,7 +3254,7 @@ GameObject:
   - component: {fileID: 1780707399}
   - component: {fileID: 1780707398}
   m_Layer: 5
-  m_Name: PlayButton
+  m_Name: QuitButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3276,7 +3276,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 20, y: -78}
+  m_AnchoredPosition: {x: 20, y: -402}
   m_SizeDelta: {x: 508, y: 254}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1780707398
@@ -3325,7 +3325,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1228405157}
         m_TargetAssemblyTypeName: PauseManager, Assembly-CSharp
-        m_MethodName: TogglePause
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3355,7 +3355,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: b08b20ab449c8ec4fa610eb8897b3ca2, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 96e226c240173c8498f5b279607724e0, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -3545,8 +3545,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 19, y: -410}
-  m_SizeDelta: {x: 508, y: 254}
+  m_AnchoredPosition: {x: 20, y: -78}
+  m_SizeDelta: {x: 581.6892, y: 254}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1901277052
 MonoBehaviour:
@@ -3624,7 +3624,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e1b191a7858e5c541b5c38ebea88af72, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b64611f3d87f5244e93e7957abc411ec, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
