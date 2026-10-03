@@ -12,6 +12,9 @@ public class EnemyChaser : MonoBehaviour
 
     [Header("VFX & Audio")]
     [SerializeField] private GameObject explosionVfxPrefab;
+    [SerializeField] private AudioClip destructionSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float soundVolume = 1f;
 
     private Rigidbody rb;
     private Transform playerTransform;
@@ -73,12 +76,35 @@ public class EnemyChaser : MonoBehaviour
             ScoreManager.Instance.AddEnemyScore();
         }
 
+        // Spawn explosion VFX if assigned
         if (explosionVfxPrefab != null)
         {
             GameObject explosion = Instantiate(explosionVfxPrefab, transform.position, Quaternion.identity);
             Destroy(explosion, 1.5f);
         }
 
+        // Play sound independently on a dedicated temporary AudioSource
+        PlayIndependentSound();
+
         Destroy(gameObject);
+    }
+
+    private void PlayIndependentSound()
+    {
+        if (destructionSound == null) return;
+
+        // Create a standalone GameObject for this specific enemy sound instance
+        GameObject soundObj = new GameObject("EnemyExplosionAudio");
+
+        // Attach and configure AudioSource
+        AudioSource source = soundObj.AddComponent<AudioSource>();
+        source.clip = destructionSound;
+        source.volume = soundVolume;
+        source.spatialBlend = 0f; // 2D sound for crisp arcade feedback
+        source.pitch = Random.Range(0.88f, 1.12f); // Slightly wider pitch variance for heavier enemy impacts
+        source.Play();
+
+        // Destroy the audio GameObject automatically after clip completes
+        Destroy(soundObj, destructionSound.length);
     }
 }

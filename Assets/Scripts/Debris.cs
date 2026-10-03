@@ -12,6 +12,9 @@ public class Debris : MonoBehaviour
 
     [Header("VFX & Audio")]
     [SerializeField] private GameObject explosionVfxPrefab;
+    [SerializeField] private AudioClip destructionSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float soundVolume = 1f;
 
     private Rigidbody rb;
     private Transform playerTransform;
@@ -43,7 +46,7 @@ public class Debris : MonoBehaviour
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
 
-        // Despawn out-of-bounds debris without awarding points
+        // Despawn out-of-bounds debris without awarding points or playing sound
         if (distanceToPlayer > outerRingRadius)
         {
             outsideTimer += Time.deltaTime;
@@ -85,6 +88,28 @@ public class Debris : MonoBehaviour
             Destroy(explosion, 1.5f);
         }
 
+        // Play sound independently on a dedicated temporary AudioSource
+        PlayIndependentSound();
+
         Destroy(gameObject);
+    }
+
+    private void PlayIndependentSound()
+    {
+        if (destructionSound == null) return;
+
+        // Create a standalone GameObject for this specific sound instance
+        GameObject soundObj = new GameObject("DebrisExplosionAudio");
+
+        // Attach and configure AudioSource
+        AudioSource source = soundObj.AddComponent<AudioSource>();
+        source.clip = destructionSound;
+        source.volume = soundVolume;
+        source.spatialBlend = 0f; // 2D sound for crisp UI/arcade feedback
+        source.pitch = Random.Range(0.9f, 1.1f); // Prevents repetitive harshness when destroyed in groups
+        source.Play();
+
+        // Destroy the audio GameObject automatically after clip completes
+        Destroy(soundObj, destructionSound.length);
     }
 }
