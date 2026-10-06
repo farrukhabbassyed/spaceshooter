@@ -7257,56 +7257,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1139918576}
   m_CullTransparentMesh: 1
---- !u!1 &1216088182
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1216088184}
-  - component: {fileID: 1216088183}
-  m_Layer: 0
-  m_Name: DebrisSpawner (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1216088183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216088182}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e4d5e904859bb454d98526e91b94db20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerTransform: {fileID: 1286137394}
-  debrisPrefab: {fileID: 185257867507208528, guid: a854078d31c2cb0448dbe95121fb593f, type: 3}
-  maxActiveDebris: 5
-  spawnInterval: 1
-  innerRadius: 15
-  outerRadius: 25
---- !u!4 &1216088184
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1216088182}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.38269714, y: 0.3592641, z: 0.9931035}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1228405152
 GameObject:
   m_ObjectHideFlags: 0
@@ -8560,7 +8510,6 @@ SceneRoots:
   - {fileID: 920778394}
   - {fileID: 3643877440458106464}
   - {fileID: 2143880071}
-  - {fileID: 1216088184}
   - {fileID: 877435331}
   - {fileID: 1228405156}
   - {fileID: 1561777469}

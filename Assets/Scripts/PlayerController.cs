@@ -194,7 +194,7 @@ public class PlayerController : MonoBehaviour
         {
             endPoint = hitInfo.point;
 
-            Debug.Log($"[LASER HIT] Hit Object: '{hitInfo.collider.name}' | Parent: '{(hitInfo.collider.transform.parent != null ? hitInfo.collider.transform.parent.name : "None")}'");
+           // Debug.Log($"[LASER HIT] Hit Object: '{hitInfo.collider.name}' | Parent: '{(hitInfo.collider.transform.parent != null ? hitInfo.collider.transform.parent.name : "None")}'");
 
             Debris debris = hitInfo.collider.GetComponentInParent<Debris>();
             EnemyChaser enemy = hitInfo.collider.GetComponentInParent<EnemyChaser>();
@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.Log("[LASER HIT] SphereCast missed everything.");
+            //Debug.Log("[LASER HIT] SphereCast missed everything.");
         }
 
         if (laserLineRenderer != null)
