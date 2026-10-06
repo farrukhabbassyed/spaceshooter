@@ -56,6 +56,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: projectile2
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 292a9f7ef95cec34ab3b6335da781c43, type: 3}
+      propertyPath: m_TagString
+      value: Bullet
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -183,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccdf3b6391a751d45bdf0b8970372f2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 35
+  speed: 60
   lifeTime: 3
   hitEffectPrefab: {fileID: 0}
   hitSound: {fileID: 0}

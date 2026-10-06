@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class EnemyChaser : MonoBehaviour
@@ -105,6 +105,123 @@ public class EnemyChaser : MonoBehaviour
         source.Play();
 
         // Destroy the audio GameObject automatically after clip completes
+        Destroy(soundObj, destructionSound.length);
+    }
+} */
+
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody))]
+public class EnemyChaser : MonoBehaviour
+{
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 8f;
+    [SerializeField] private float rotationSpeed = 10f;
+
+    [Header("Despawn Settings")]
+    [SerializeField] private float maxDistanceFromPlayer = 45f;
+
+    [Header("VFX & Audio")]
+    [SerializeField] private GameObject explosionVfxPrefab;
+    [SerializeField] private AudioClip destructionSound;
+    [Range(0f, 1f)]
+    [SerializeField] private float soundVolume = 1f;
+
+    private Rigidbody rb;
+    private Transform playerTransform;
+    private bool isDead = false; // Prevents double destruction/scoring
+
+    private void Start()
+    {
+        rb = GetComponent<Rigidbody>();
+
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+        {
+            playerTransform = playerObj.transform;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (playerTransform == null) return;
+
+        Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+        directionToPlayer.y = 0f;
+
+        if (directionToPlayer.sqrMagnitude > 0.001f)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.fixedDeltaTime);
+        }
+
+        rb.linearVelocity = transform.forward * moveSpeed;
+    }
+
+    private void Update()
+    {
+        if (playerTransform != null && Vector3.Distance(transform.position, playerTransform.position) > maxDistanceFromPlayer)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+{
+    if (isDead) return;
+
+    // 1. Hit by bullet/laser -> Die cleanly, NO player damage
+    if (other.CompareTag("Bullet") || other.GetComponentInParent<Bullet>() != null)
+    {
+        DestroyEnemy();
+        Destroy(other.gameObject);
+        return;
+    }
+
+    // 2. Rammed into Player -> Destroy enemy (PlayerHealth handles health subtraction)
+    if (other.CompareTag("Player") || other.GetComponentInParent<PlayerHealth>() != null)
+    {
+        DestroyEnemy();
+    }
+}
+
+    public void DestroyEnemy()
+{
+    if (isDead) return;
+    isDead = true;
+
+    // 1. ADD SCORE HERE
+    if (ScoreManager.Instance != null)
+    {
+        ScoreManager.Instance.AddScore(20); // Pass your desired score amount
+    }
+    else
+    {
+        Debug.LogWarning("ScoreManager Instance is missing in the scene!");
+    }
+
+    // 2. Play Audio & VFX
+    if (explosionVfxPrefab != null)
+    {
+        Instantiate(explosionVfxPrefab, transform.position, Quaternion.identity);
+    }
+
+    // 3. Destroy Enemy Root
+    Destroy(gameObject);
+}
+
+    private void PlayIndependentSound()
+    {
+        if (destructionSound == null) return;
+
+        GameObject soundObj = new GameObject("EnemyExplosionAudio");
+        AudioSource source = soundObj.AddComponent<AudioSource>();
+        source.clip = destructionSound;
+        source.volume = soundVolume;
+        source.spatialBlend = 0f;
+        source.pitch = Random.Range(0.88f, 1.12f);
+        source.Play();
+
         Destroy(soundObj, destructionSound.length);
     }
 }

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2099698895617175641}
   - component: {fileID: 8116602236750688747}
   - component: {fileID: 1153433269774365523}
+  - component: {fileID: -8656955949908950264}
   m_Layer: 0
   m_Name: EnemyChaser
   m_TagString: Enemy
@@ -154,6 +155,22 @@ MonoBehaviour:
   moveSpeed: 8
   rotationSpeed: 10
   maxDistanceFromPlayer: 45
-  explosionVfxPrefab: {fileID: 0}
+  explosionVfxPrefab: {fileID: 505428354051462400, guid: e147d799e0e591f4eac5702e78440738, type: 3}
   destructionSound: {fileID: 8300000, guid: c7117d6241fb77543a9d0d113186aeab, type: 3}
   soundVolume: 1
+--- !u!114 &-8656955949908950264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6292074066248538891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccdf3b6391a751d45bdf0b8970372f2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 35
+  lifeTime: 3
+  hitEffectPrefab: {fileID: 505428354051462400, guid: e147d799e0e591f4eac5702e78440738, type: 3}
+  hitSound: {fileID: 8300000, guid: e6ca4d35b9885214abda4f09f68c373c, type: 3}

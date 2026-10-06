@@ -185,28 +185,38 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = transform.forward;
         Vector3 endPoint = origin + direction * laserRange;
 
-        if (Physics.Raycast(origin, direction, out RaycastHit hitInfo, laserRange, hitscanLayers))
+        // Laser radius matches line renderer thickness to catch vertical plane variations
+        float laserRadius = 0.5f;
+
+        Debug.DrawRay(origin, direction * laserRange, Color.red, 2f);
+
+        if (Physics.SphereCast(origin, laserRadius, direction, out RaycastHit hitInfo, laserRange, hitscanLayers, QueryTriggerInteraction.Collide))
         {
             endPoint = hitInfo.point;
 
-            // Check for Debris or Chaser Enemy targets
-            Debris debris = hitInfo.collider.GetComponent<Debris>();
-            EnemyChaser enemy = hitInfo.collider.GetComponent<EnemyChaser>();
+            Debug.Log($"[LASER HIT] Hit Object: '{hitInfo.collider.name}' | Parent: '{(hitInfo.collider.transform.parent != null ? hitInfo.collider.transform.parent.name : "None")}'");
+
+            Debris debris = hitInfo.collider.GetComponentInParent<Debris>();
+            EnemyChaser enemy = hitInfo.collider.GetComponentInParent<EnemyChaser>();
 
             if (debris != null)
-{
-    debris.DestroyDebris(); // Triggers score, explosion VFX, and destroys the GameObject
-}
-else if (enemy != null)
-{
-    enemy.DestroyEnemy();   // Triggers score, explosion VFX, and destroys the GameObject
-}
+            {
+                debris.DestroyDebris();
+            }
+            else if (enemy != null)
+            {
+                enemy.DestroyEnemy();
+            }
 
             if (laserHitEffectPrefab != null)
             {
                 GameObject hitVfx = Instantiate(laserHitEffectPrefab, hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
                 Destroy(hitVfx, 1f);
             }
+        }
+        else
+        {
+            Debug.Log("[LASER HIT] SphereCast missed everything.");
         }
 
         if (laserLineRenderer != null)
