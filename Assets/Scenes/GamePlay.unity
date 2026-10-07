@@ -8380,6 +8380,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: -2432090755550338912, guid: e1360b83b15a77544935b90417482282, type: 3}
+    - target: {fileID: 2498110185854597280, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
+      propertyPath: explosionVfxPrefab
+      value: 
+      objectReference: {fileID: 2506869455870301059, guid: 947904771bcbcd24193fc207fc0f5347, type: 3}
     - target: {fileID: 3024555942953120099, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.01
