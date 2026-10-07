@@ -1,12 +1,13 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour
 {
     public static GameTimer Instance { get; private set; }
 
     [Header("UI Reference")]
-    [SerializeField] private TextMeshProUGUI timerText;
+    [SerializeField] private Text timerText;
 
     private float elapsedTime = 0f;
     private bool isTimerRunning = false;
