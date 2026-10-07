@@ -8433,6 +8433,10 @@ PrefabInstance:
       value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
+      propertyPath: cannonMuzzleFlash
+      value: 
+      objectReference: {fileID: 5829397101334820412, guid: cd72cdaf62f827d4f99f18a27b34b0bb, type: 3}
+    - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: projectileFireRate
       value: 0.1
       objectReference: {fileID: 0}
