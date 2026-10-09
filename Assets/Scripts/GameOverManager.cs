@@ -171,8 +171,8 @@ public class GameOverManager : MonoBehaviour
 
     [Header("UI Panel Reference")]
     [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TextMeshProUGUI finalScoreText;
-    [SerializeField] private TextMeshProUGUI finalTimeText;
+    [SerializeField] private Text finalScoreText;
+    [SerializeField] private Text finalTimeText;
 
     [Header("Buttons")]
     [SerializeField] private Button restartButton;
