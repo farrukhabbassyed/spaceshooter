@@ -157,6 +157,6 @@ MonoBehaviour:
   explosionForce: 350
   explosionRadius: 2.5
   piecesLifetime: 3
-  explosionVfxPrefab: {fileID: 0}
+  explosionVfxPrefab: {fileID: 7867261642806057986, guid: 29310fb85a3922d4ab72e6a200bcee5b, type: 3}
   destructionSound: {fileID: 0}
   soundVolume: 1
