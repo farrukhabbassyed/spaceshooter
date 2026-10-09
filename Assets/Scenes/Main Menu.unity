@@ -518,7 +518,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Placeholder title
+  m_Text: ARKASA ARCADE
 --- !u!222 &1382845978
 CanvasRenderer:
   m_ObjectHideFlags: 0
