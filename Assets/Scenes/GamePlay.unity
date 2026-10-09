@@ -8348,7 +8348,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 1286137394}
-  debrisPrefab: {fileID: 6271553195526580596, guid: 6a4f0d83fabaa1d4ebb7bd5829b0ff91, type: 3}
+  debrisPrefab: {fileID: 7642645150332031135, guid: f48c8b3dd23223c46b574e89a4119f6e, type: 3}
   maxActiveDebris: 10
   spawnInterval: 1
   innerRadius: 15
