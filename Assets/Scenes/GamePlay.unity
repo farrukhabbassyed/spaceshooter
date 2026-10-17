@@ -1302,7 +1302,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &877435330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11432,7 +11432,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.78113204, g: 0.6824892, b: 0.15770023, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11664,7 +11664,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12327,7 +12327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.78039217, g: 0.68235296, b: 0.15686275, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12862,11 +12862,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: maxSpeed
-      value: 20
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
+      propertyPath: rotationSpeed
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: accelerationForce
-      value: 30
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: cannonMuzzleFlash
@@ -12874,7 +12878,7 @@ PrefabInstance:
       objectReference: {fileID: 5829397101334820412, guid: cd72cdaf62f827d4f99f18a27b34b0bb, type: 3}
     - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: projectileFireRate
-      value: 0.35
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 3039868162913084595, guid: 916a2231b1a634643b19f115cde2ce62, type: 3}
       propertyPath: laserHitEffectPrefab

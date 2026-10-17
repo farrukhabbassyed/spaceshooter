@@ -155,8 +155,8 @@ MonoBehaviour:
   timeAllowedOutside: 2
   shatteredDebrisPrefab: {fileID: 8783505797677970798, guid: 30d6b36679dc8af4c85413062b3fa33f, type: 3}
   explosionForce: 350
-  explosionRadius: 2.5
+  explosionRadius: 3
   piecesLifetime: 3
-  explosionVfxPrefab: {fileID: 7867261642806057986, guid: 29310fb85a3922d4ab72e6a200bcee5b, type: 3}
-  destructionSound: {fileID: 0}
+  explosionVfxPrefab: {fileID: 100002, guid: 6ecf76dc4f268d340b2666896a954bcc, type: 3}
+  destructionSound: {fileID: 8300000, guid: 09e01ef0c87da2d4787fde04d1a75425, type: 3}
   soundVolume: 1

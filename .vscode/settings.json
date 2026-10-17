@@ -67,6 +67,6 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "spaceshooter.slnx",
+    "dotnet.defaultSolution": "Space Shooter.slnx",
     "dotnet.enableWorkspaceBasedDevelopment": false
 }
