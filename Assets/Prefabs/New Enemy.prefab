@@ -131,7 +131,7 @@ MonoBehaviour:
   moveSpeed: 10
   rotationSpeed: 14
   maxDistanceFromPlayer: 45
-  explosionVfxPrefab: {fileID: 2433282508537954060, guid: 3ef3ae421f71c5c4e97fe12dc2fc6312, type: 3}
+  explosionVfxPrefab: {fileID: 5439435029640673042, guid: 560df099a1ba8a54093c8d546c78779a, type: 3}
   destructionSound: {fileID: 8300000, guid: c7117d6241fb77543a9d0d113186aeab, type: 3}
   soundVolume: 1
 --- !u!64 &1741579580359198834
